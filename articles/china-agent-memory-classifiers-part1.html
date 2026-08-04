@@ -1,0 +1,57 @@
+<p>“AI memory” is everywhere now. Model companies talk about it in launch events. Agent platforms put it on product pages. Consumer AI apps promise to “understand you better the more you use them.”</p>
+<p>But anyone who has tried to build an agent with the DeepSeek, Zhipu, or Kimi API soon runs into an awkward question:</p>
+<p><strong>Is memory built into the model product or agent platform, or do I still have to build it myself?</strong></p>
+<p>We looked through major Chinese model providers, agent platforms, and several open-source frameworks. The answer is less impressive than the marketing suggests:</p>
+<p><strong>A large share of what Chinese AI products call “memory” is still long context, conversation summaries, variables, or knowledge-base retrieval. Systems that can automatically extract, update, and forget long-term memories are much less common.</strong></p>
+<h2>What Does “Memory” Usually Mean in China’s Agent Market?</h2>
+<p>The word is used for several very different things. It helps to separate them first.</p>
+<h3>1. It can hold more context</h3>
+<p>DeepSeek, Kimi, Doubao, and other models now support very large context windows. Caching can also make repeated context cheaper.</p>
+<p>But being able to hold a large conversation is not the same as remembering it well. A phone can store ten thousand photos without knowing which ones matter.</p>
+<p>Kimi’s own documentation describes multi-turn “memory” as maintaining a list of previous messages and sending that list back to the model. In other words, the model reads the history again. Whether it notices the right thing is another matter.</p>
+<h3>2. It can retrieve information</h3>
+<p>This is the knowledge-base and RAG layer used by platforms such as Dify, FastGPT, and RAGFlow.</p>
+<p>Documents are split into chunks, stored in a vector database, and retrieved when needed. This helps an agent answer questions from a product manual. It does not automatically mean the agent remembers that you said last week that you hate sweet coffee.</p>
+<p>In many applications, retrieval still depends on a direct user question or a workflow rule. Stored knowledge does not automatically become part of the agent’s long-term understanding.</p>
+<h3>3. It can choose what to keep</h3>
+<p>This is the first real step toward long-term memory: the AI reads a conversation and decides which details may matter later.</p>
+<h3>4. It can update and forget</h3>
+<p>A more complete memory system also needs to handle change.</p>
+<p>New information should be able to update old facts. Outdated memories should be merged, marked inactive, or removed. A memory store that only grows will eventually become a messy pile of conflicting old facts.</p>
+<p>So a useful memory system needs four layers:</p>
+<pre><code class="language-text">Can hold it
+Can retrieve it
+Can choose what to keep
+Can update and forget
+</code></pre>
+<p>In the public systems we could verify, most products still focus on the first two layers. Only a small number have clearly reached the last two.</p>
+<h2>Why Model Providers Have Not Solved This for Developers</h2>
+<p>The Chinese ecosystem is divided into three kinds of providers.</p>
+<h3>Model providers</h3>
+<p>DeepSeek, Zhipu, Kimi, Doubao, ERNIE, and Hunyuan mainly provide the “outer brain”:</p>
+<ul>
+<li>long context,</li>
+<li>caching,</li>
+<li>knowledge-base access,</li>
+<li>tool use,</li>
+<li>structured JSON output.</li>
+</ul>
+<p>What they usually do not expose is a general memory-management API that decides what should be remembered and how old memories should change.</p>
+<p>In the public API documentation we could verify, we did not find a general automatic memory interface comparable to ChatGPT’s account-level memory. Consumer apps may have their own internal memory features, but their mechanisms are not publicly documented.</p>
+<h3>Agent platforms</h3>
+<p>Platforms such as Coze, Dify, and FastGPT provide building blocks:</p>
+<ul>
+<li>variables,</li>
+<li>conversation summaries,</li>
+<li>knowledge-base nodes,</li>
+<li>parameter extraction,</li>
+<li>workflow logic.</li>
+</ul>
+<p>A developer can combine these into a hand-built memory pipeline. For example, after every conversation, the model can extract a user preference and save it into a persistent variable.</p>
+<p>But the developer still has to design the rules for selection, updating, and forgetting. The platform provides the parts, not the full memory policy.</p>
+<h3>Independent memory frameworks</h3>
+<p>A third layer has started to grow between models and agent platforms: dedicated memory frameworks.</p>
+<p>These frameworks handle extraction, comparison, updating, storage, and retrieval. They turn a model’s judgment into something persistent and reusable.</p>
+<p>The key idea is simple:</p>
+<p><strong>The model provides the judgment. The framework turns that judgment into memory that can be stored, updated, and recalled.</strong></p>
+<p>In many Chinese model APIs and general-purpose agent platforms, this is still not a default capability. Open-source projects are filling the gap.</p>
