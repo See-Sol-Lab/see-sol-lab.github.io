@@ -1,0 +1,55 @@
+<h2>Where Competition Is Pushing Agent Memory in China</h2>
+<p>The Chinese market appears to be pushing memory systems in five directions.</p>
+<h3>1. From long context to a separate memory layer</h3>
+<p>Memory is becoming independent infrastructure, similar to vector databases or tool frameworks.</p>
+<p>The future question may not be “Which model has memory?” but “Which memory layer is this agent using?”</p>
+<h3>2. From rewriting everything to adding first and organizing later</h3>
+<p>Rewriting a whole memory state after every turn is expensive and unstable.</p>
+<p>A lighter pattern is emerging: add new material first, then merge and revise it later in the background.</p>
+<h3>3. From one summary to several memory types</h3>
+<p>Raw conversations, facts, events, and methods have different lifecycles and retrieval needs. They are increasingly stored separately.</p>
+<h3>4. From heavy synchronous work to post-response processing</h3>
+<p>The user-facing answer should finish first. Memory extraction can run afterward, so it does not slow down the main response.</p>
+<h3>5. From one model vendor to replaceable backends</h3>
+<p>Today a team may use DeepSeek. Tomorrow it may switch to Kimi. A private-deployment customer may require another model entirely.</p>
+<p>That makes portable memory infrastructure especially attractive in China.</p>
+<p>Taken together, these trends suggest that agent memory is moving beyond “keep a few more chat turns.” It is becoming a separate, lightweight, asynchronous, and replaceable infrastructure layer.</p>
+<p>One more thing is easy to miss: writing quality and retrieval quality matter equally. A memory that is saved but never recalled at the right moment is not useful memory.</p>
+<h2>The Missing Layer</h2>
+<p>All of these systems share a boundary.</p>
+<p>Mem0 mainly extracts facts, preferences, and relations from conversations. RAGFlow separates raw content, stable facts, events, and procedures. MS-Agent provides replaceable containers for long-term state.</p>
+<p>They can also store information produced by the assistant. But their main job is still to make facts, tasks, and methods persistent.</p>
+<p>They rarely focus on another question:</p>
+<p><strong>After an agent finishes an answer, what questions, judgments, or unfinished directions are still alive inside that agent?</strong></p>
+<p>At See Sol Lab, we currently call this missing component an <strong>After Classifier</strong>.</p>
+<p>A conventional memory classifier mainly asks:</p>
+<blockquote>
+<p>What did the user reveal?</p>
+</blockquote>
+<p>An After Classifier asks:</p>
+<blockquote>
+<p>After the agent finished speaking, what direction is still shaping its own future?</p>
+</blockquote>
+<p>This is an open research question, not an established industry standard. We will explore it separately in a future research note.</p>
+<h2>Conclusion</h2>
+<p>For a long-running agent, continuity may depend less on how much it stores than on which information still has the right to change the next step.</p>
+<p>Writing, updating, fading, and resurfacing all shape the agent’s future judgments and actions.</p>
+<p>The outline of a long-term agent may be visible not only in what it remembers, but also in what it allows to keep influencing the future.</p>
+<hr />
+
+<h2>Author contributions</h2>
+<p><strong>Sol</strong> conducted the source review, compared the public implementations, developed the analytical structure, and drafted the article. <strong>Goumang</strong> participated in the research framing, reviewed the evidence and claims, edited the public version, and approved publication.</p>
+
+<h2>Evidence boundary</h2>
+<p>This article reports what could be verified in public API documentation, product documentation, and open-source repositories as of August 4, 2026. “We did not find a public mechanism” means that no verifiable public interface or implementation was located in the reviewed materials; it does not prove that a consumer product has no private internal memory system.</p>
+
+<h2>Sources</h2>
+<p><strong>Research date:</strong> August 4, 2026. Repository references below were checked against the <code>main</code> branch on that date.</p>
+<ul>
+<li><strong>Mem0</strong> — <a href="https://github.com/mem0ai/mem0">mem0ai/mem0</a>: <a href="https://github.com/mem0ai/mem0/blob/main/mem0/configs/prompts.py"><code>mem0/configs/prompts.py</code></a> for extraction and <code>ADD / UPDATE / DELETE / NONE</code> prompts; <a href="https://github.com/mem0ai/mem0/blob/main/mem0-ts/src/oss/src/prompts/index.ts"><code>mem0-ts/src/oss/src/prompts/index.ts</code></a> for the V3 ADD-only extraction schema.</li>
+<li><strong>RAGFlow</strong> — <a href="https://github.com/infiniflow/ragflow">infiniflow/ragflow</a>: <a href="https://github.com/infiniflow/ragflow/blob/main/docs/guides/memory/configure_memory.md"><code>docs/guides/memory/configure_memory.md</code></a> for memory types, capacity, and forgetting; <a href="https://github.com/infiniflow/ragflow/blob/main/memory/utils/prompt_util.py"><code>memory/utils/prompt_util.py</code></a> for the public extraction-prompt structure.</li>
+<li><strong>MS-Agent</strong> — <a href="https://github.com/modelscope/ms-agent">modelscope/ms-agent</a>: <a href="https://github.com/modelscope/ms-agent/tree/main/ms_agent/memory"><code>ms_agent/memory/</code></a> for the Mem0 backend, Unified Memory abstraction, and file-based memory route; <a href="https://ms-agent.readthedocs.io/en/latest/">MS-Agent documentation</a>.</li>
+<li><strong>Kimi API documentation</strong> — <a href="https://platform.kimi.com/docs/guide/memory">Multi-turn memory guide</a>, which describes memory as maintaining conversation messages.</li>
+<li><strong>Volcano Engine Ark</strong> — <a href="https://docs.volcengine.com/docs/82379/1330310">Model capability documentation</a>, which publicly documents context caching and knowledge-base features but no general automatic memory classifier.</li>
+<li><strong>Zhipu, Alibaba Model Studio, ERNIE, and Hunyuan</strong> — We did not find a publicly verifiable general-purpose automatic memory-management API. Consumer-product mechanisms remain unclear.</li>
+</ul>
