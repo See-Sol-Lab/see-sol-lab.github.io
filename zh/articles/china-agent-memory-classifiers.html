@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="调查中国大陆 Agent 生态中的自动记忆机制：长上下文、RAG、Mem0、RAGFlow、MS-Agent，以及真正会挑选、更新和遗忘的长期记忆有多少。">
+  <link rel="canonical" href="https://see-sol-lab.github.io/zh/articles/china-agent-memory-classifiers.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://see-sol-lab.github.io/zh/articles/china-agent-memory-classifiers.html">
+  <meta property="og:title" content="国内 Agent 都在说“记忆”，真正会自己记的有多少？">
+  <meta property="og:description" content="当中国 Agent 开始卷用户，记忆分类器先变了形">
+  <meta property="og:type" content="article">
+  <title>国内 Agent 都在说“记忆”，真正会自己记的有多少？｜See Sol Lab</title>
+  <link rel="stylesheet" href="../../assets/styles.css">
+</head>
+<body class="zh">
+  <div class="shell">
+    <nav>
+      <a class="brand" href="../index.html">SEE SOL LAB</a>
+      <div class="nav-right">
+        <div class="links">
+          <a href="../index.html">首页</a>
+          <a href="../about.html">关于</a>
+          <a href="../research.html">研究</a>
+          <a href="../writing.html" aria-current="page">文章</a>
+          <a href="https://github.com/See-Sol-Lab">GitHub</a>
+          <a href="https://x.com/fire_see61332">X</a>
+        </div>
+        <div class="lang-switch" aria-label="语言">
+          <a href="../../writing.html#industry-analysis" lang="en">EN</a>
+          <span class="active">中文</span>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <header class="article-header">
+        <div class="eyebrow">业界观察 · 中国 Agent 生态</div>
+        <h1>国内 Agent 都在说“记忆”，真正会自己记的有多少？</h1>
+        <p class="article-subtitle">当中国 Agent 开始卷用户，记忆分类器先变了形</p>
+        <p class="byline">Sol、句芒 · 2026年8月4日</p>
+        <div class="article-note">本文中的“国内”均指中国大陆 Agent 生态。国际版将面向海外读者重新写成中国市场观察，而非逐句翻译。<br>这是一份面向开发者的业界观察。结论基于截至 2026 年 8 月 4 日能够核验的公开 API 文档、开源仓库和 Agent 平台资料。</div>
+      </header>
+
+      <article class="article-body">
+<p>最近一段时间，&quot;AI 记忆&quot;这个词被用得越来越满。模型厂商的发布会要讲记忆，Agent 平台的宣传页要讲记忆，连各种大模型 App 都在强调&quot;越用越懂你&quot;。可如果你真的动手拿 DeepSeek、智谱或者 Kimi 的 API 搭过一个 Agent，大概会产生一个隐隐的困惑：这些&quot;记忆&quot;，到底是模型产品或 Agent 平台自带的，还是得靠我自己一行一行搭出来？</p>
+<p>带着这个困惑，我们把国内主流的模型厂商、Agent 平台和几个开源框架翻了一遍。结论有点扎心：<strong>国内 Agent 产品中，大量被称作&quot;记忆&quot;的能力，实际仍是长上下文、会话摘要、变量和知识库检索。真正带有自动抽取、更新和遗忘的长期记忆，远没有宣传页面让人感觉的那么普遍。</strong></p>
+<h2>国内 Agent 所谓的&quot;记忆&quot;，究竟是什么</h2>
+<p>这里先把&quot;记忆&quot;被用成了几种意思说清楚，否则后面没法细聊。</p>
+<p>第一种是&quot;装得下&quot;。DeepSeek、Kimi、豆包这些模型的上下文窗口，现在动辄几十万字起步，再加上各种缓存技术，聊过的内容再聊一次还能便宜点。可这只能算&quot;能装下&quot;，跟&quot;记得住&quot;差着十万八千里。就像手机能存一万张照片，但大多数人说不清每张照片里拍的是谁。Kimi 的官方文档甚至直白地写着：多轮对话记忆，就是&quot;把历史消息列表喂回去&quot;。换句话说，记不记得住谁知道，记的是不是重点也没人知道，总之模型只负责读一遍。</p>
+<p>第二种是&quot;查得到&quot;，也就是知识库和 RAG。Dify、FastGPT、RAGFlow 这些平台的主要本事，是把你的文档切碎塞进向量库，你需要的时候检索出来给你。这解决的是&quot;答得上产品手册里的问题&quot;，跟&quot;它记得你上周说过自己喜欢什么&quot;是两码事。而且在不少应用中，检索还依赖用户明确发问，或者预设的工作流和路由规则触发，知识本身不会自动变成 Agent 的长期认识。</p>
+<p>第三种是&quot;会挑选&quot;：AI 在对话里自己决定要留下什么。这是真正的记忆迈出的第一步。</p>
+<p>但光会挑选还差得远。完整的长期记忆还应该有第四层，<strong>&quot;会更新与遗忘&quot;</strong>：新信息来了能改写旧事实，旧信息过时了能合并、失效或者删掉。一个只进不出的记忆库，用久了会变成一坨互相打架的屎山。</p>
+<p>把这四层连起来，才是衡量&quot;真记忆&quot;的完整标尺：</p>
+<pre><code>装得下
+查得到
+会挑选
+会更新与遗忘
+</code></pre>
+<p>在本次能够核验的公开样本中，多数产品的&quot;记忆&quot;仍停在前两层，能走到后两层的屈指可数。</p>
+<h2>为什么模型厂商没有直接替开发者完成</h2>
+<p>要理解&quot;记忆&quot;为什么这么稀缺，先得看清这个生态的三层分工。</p>
+<p>第一类提供者是模型厂商。DeepSeek、智谱、Kimi、豆包、文心、混元，这一层给的几乎全是&quot;外脑&quot;：长上下文、缓存、知识库、工具调用、JSON 输出，样样俱全，唯独把&quot;该记什么、怎么改&quot;这种&quot;内脑&quot;的活留在了门外。在本次能够核验的公开 API 文档里，通用自动记忆管理接口（类似 ChatGPT 账户级记忆）目前缺席；产品 App 内部是否另有记忆分类器，公开资料目前难以确认。</p>
+<p>第二类提供者是 Agent 平台。Coze、Dify、FastGPT 给的是积木：变量、会话摘要、知识库节点、参数抽取节点。有心人可以拿这些积木拼出一套手工编排的记忆流程：比如每次聊完，让模型把用户偏好抽出来存进变量。但判断标准、更新路径和遗忘策略都需要开发者亲自设计，平台把&quot;怎样记&quot;这件事交给了开发者。</p>
+<p>第三类，是独立于厂商和平台存在的记忆框架。它们横向插入模型与平台之间，负责抽取、比较、更新、存储和召回，等于把&quot;内脑&quot;单独做成一层软件。真正在干这件事的是几个开源项目。</p>
+<p>这篇文章最想带给普通读者的认知就是：<strong>模型提供判断能力，框架把这种判断变成可持久、可更新、可召回的记忆机制。而&quot;怎样记&quot;这件事，目前主要由开源生态补上；在多数国内模型 API 和通用 Agent 平台中，它还没有成为默认能力。</strong></p>
+<h2>三条已经成形的路线</h2>
+<p>与其听各家宣传，不如直接看三个代表项目怎么做。它们走了三条不同的路线，但共同流程大致可以概括为四步：挑，把一段对话丢给模型，让它挑出值得留的东西，整理成结构化清单；比，拿新清单跟旧记忆比对，决定每一条是新增、修改、删除还是不管；存，把该留的存进记忆库，通常还转成向量方便搜索；想，下次聊天先把相关的旧记忆搜出来塞进提示词，AI 就&quot;想起来&quot;了。</p>
+<p><strong>Mem0，分类器和记忆管理器。</strong>它是目前较有影响力、公开程度也很高的 Agent 记忆框架，判断规则全部开源，想研究就能研究；又支持多种 OpenAI 兼容模型，也被国内框架直接接入，因此成为许多 API Agent 最容易采用的现成方案之一。它身上发生过一次特别值得注意的路线转变：早期版本每聊完一轮，就对着旧记忆做一次&quot;新增、修改、删除、不动&quot;的四选一；从 2026 年 4 月开始，新版把写入阶段收缩成 ADD-only，模型仍然先挑选值得形成记忆的内容，但不在这一轮直接覆盖或删除旧记忆。新事实先追加，重复、冲突和时间变化交给后续的去重、关联、召回排序或低频整理处理。从架构变化看，这样可以减少每轮比较和改写旧记忆的调用成本，也降低错误覆盖历史的风险。</p>
+<p><strong>RAGFlow，分类型的异步记忆管线。</strong>在本次调查中，RAGFlow 是公开机制最完整的国内平台之一，2025 年底上线了 Agent 记忆功能。它最大的亮点是把记忆分成四类：原始对话、事实偏好、事件经历、流程方法。原始对话是底子；事实偏好是相对稳定的信息，长期复用；事件经历是带时间的故事，用来追溯；流程方法是做事的套路，让 AI 下次照着干。它还做了遗忘机制：达到容量上限后，当前公开策略会按先进先出逐步淘汰较早内容，单条消息还可以停用或设置遗忘时间。在国内平台里，能见到&quot;遗忘&quot;二字，本身就是稀罕事。它的局限在于&quot;挑拣员&quot;的规则只公开了一个模板骨架，内部对修改、合并的处理方式尚不透明。</p>
+<p><strong>MS-Agent，可插拔后端与文件式记忆。</strong>它是 ModelScope 社区的开源 Agent 框架，特点在于把记忆做成可插拔能力，具体算法和存储都可以替换。它可以接 Mem0 等外部后端，也提供文件式 MEMORY.md 路线：模型读取当前文件和新对话，再提交更新后的版本。它展示的是&quot;框架负责统一接口，记忆算法和存储可以替换&quot;的工程思路。国内模型价格、能力和部署要求变化很快，这套思路某种程度上是被商业环境逼出来的。</p>
+<p>三条路线摆在一起，差异更清楚：</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th></th>
+  <th>核心思路</th>
+  <th>写入</th>
+  <th>更新 / 遗忘</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>Mem0 旧版</strong></td>
+  <td>抽取 + CRUD 分类</td>
+  <td>ADD / UPDATE / DELETE / NONE</td>
+  <td>冲突可在写入阶段 DELETE</td>
+</tr>
+<tr>
+  <td><strong>Mem0 新版</strong></td>
+  <td>ADD-only + 后置处理</td>
+  <td>新事实追加，不直接覆盖旧项</td>
+  <td>写入阶段不删除，交给去重、关联、时间排序或后续整理</td>
+</tr>
+<tr>
+  <td><strong>RAGFlow</strong></td>
+  <td>分类型异步记忆管线</td>
+  <td>四类记忆分层追加</td>
+  <td>容量上限 + 先进先出 + 可停用</td>
+</tr>
+<tr>
+  <td><strong>MS-Agent</strong></td>
+  <td>可插拔后端 + 文件式记忆</td>
+  <td>模型提交新版 MEMORY.md</td>
+  <td>交给后端策略</td>
+</tr>
+</tbody>
+</table></div>
+<p>把这三条路线拆开看，一套长期记忆机制大致包括三件套：一个&quot;挑拣员&quot;决定留什么，一个&quot;仓库&quot;负责存和搜，再加一个&quot;整理员&quot;偶尔来合并、清理。国内平台大多只给了仓库，挑拣员和整理员往往要开发者自己补。</p>
+<p>再举个最小的例子，用 Mem0 旧版的 UPDATE 路线来演示。假设用户说：&quot;我叫小周，最爱喝冷萃，下个月要去云南出差。&quot;第一步，记忆框架把这段对话交给模型，让模型列出候选清单：用户叫小周、用户喜欢冷萃咖啡、用户下个月去云南出差。第二步，框架取回相关的旧记忆，再让模型判断每条信息应该新增、更新、删除还是保持不动。下次用户说&quot;推荐个喝的&quot;，AI 先自动翻出记忆，然后说：&quot;按你爱喝冷萃的习惯，推荐……&quot;机制本身确实简单，真正见功夫的是那些细节：什么时候触发、新旧矛盾怎么处理、怎么防止记了一堆垃圾、怎么保证它真能在需要的时候想起来。</p>
+<h2>国内竞争正在把记忆系统推向哪里</h2>
+<p>看到这，我们大致能看出国内竞争环境正在塑造的方向可能有五条：</p>
+<p>第一，<strong>从长上下文走向独立记忆层。</strong>记忆越来越像向量数据库、工具调用框架那样，成为一层独立中间件，与某个模型专有的小功能划清界限。未来可能的选择，从&quot;哪家模型有记忆&quot;变成&quot;这个 Agent 挂哪套记忆器官&quot;。</p>
+<p>第二，<strong>从整份重写走向追加和后置整理。</strong>每轮重写一切既贵又容易漂移。先追加、后合并，正在成为主流的成本选择。这也意味着，复杂合并会移到后台慢慢做，主流程只负责轻量写入。</p>
+<p>第三，<strong>从单一摘要走向类型分层。</strong>原始对话、事实、事件、方法被分开管理，因为它们的生命周期和召回方式完全不同。</p>
+<p>第四，<strong>从同步重流程走向回答后异步处理。</strong>面向用户的回答先完成，记忆抽取再放到后台处理，避免拖慢主响应。</p>
+<p>第五，<strong>从绑定单一模型走向可插拔后端。</strong>今天用 DeepSeek，明天换 Kimi，后天客户要求私有化部署。长期状态绑死在某一家模型身上，本身就站不稳。</p>
+<p>把这五条放在一起，我们可以看到：国内 Agent 生态的记忆正在越过&quot;多塞几轮上下文&quot;的阶段，被推成一个独立、轻量、异步、可替换的基础设施层。成本竞争、频繁换模和私有化部署需求，让这些路线在国内尤其有吸引力。</p>
+<p>还有一个常被忽略的配套要求：召回质量与写入质量同样重要。记得下来，还要能在正确的时刻想起来，否则派不上用场。</p>
+<h2>仍然缺的那一块</h2>
+<p>记录到这里，你会发现一个共同的问题：</p>
+<p>Mem0 主要处理从对话中抽取出的事实、偏好与关联信息；RAGFlow 将记忆拆成原始内容、稳定事实、事件经历和流程方法；MS-Agent 则提供可替换的长期状态载体。它们也可以保存 assistant 一侧产生的信息，但核心仍然是把事实、任务和方法持续化。它们很少专门记录一件事：<strong>Agent 完成一次回答以后，自己还留下了什么问题、判断或未完成的方向。</strong></p>
+<p>我们把这一缺口暂时称为 After Classifier。现有的前分类器主要关心&quot;用户透露了什么&quot;；After Classifier 则观察&quot;Agent 刚才表达以后，有什么方向仍在继续影响它自己的未来&quot;。需要说明的是，这是 See Sol Lab 正在研究的一个新问题，还谈不上行业共识。后续会在研究笔记系列单独展开。</p>
+<p>至于这些记忆框架中的更新与遗忘机制最终会怎样演进，以及 Agent 自己的状态该由谁来记，我们下一篇接着聊。</p>
+<h2>结尾</h2>
+<p>对长期 Agent 来说，决定连续性的可能不是保存了多少，而是哪些信息仍有资格改变下一步。写入、更新、沉底和重新浮现，共同塑造着它未来的判断与行动。一个长期 Agent 的轮廓，也许不只藏在它记住了什么，还藏在它允许什么继续影响未来。</p>
+<hr />
+<p><strong>来源说明</strong></p>
+<p>调查日期：2026-08-04（审稿当日 main 分支快照）。以下结论分别来自官方源码与产品文档，技术读者可按链接复核；各条已标注&quot;源码 / 产品文档 / 未发现公开机制&quot;。</p>
+<ul>
+<li><strong>Mem0</strong>（<a href="https://github.com/mem0ai/mem0">mem0ai/mem0</a>，main，2026-08-04）：<a href="https://github.com/mem0ai/mem0/blob/main/mem0/configs/prompts.py">mem0/configs/prompts.py</a>（抽取与 ADD/UPDATE/DELETE/NONE 更新判定 prompt，源码）、<a href="https://github.com/mem0ai/mem0/blob/main/mem0-ts/src/oss/src/prompts/index.ts">mem0-ts/src/oss/src/prompts/index.ts</a>（V3 ADD-only 抽取与 schema，源码）。&quot;新版收缩为 ADD-only&quot;来自官方文档与源码。</li>
+<li><strong>RAGFlow</strong>（<a href="https://github.com/infiniflow/ragflow">infiniflow/ragflow</a>，main，2026-08-04）：<a href="https://github.com/infiniflow/ragflow/blob/main/docs/guides/memory/configure_memory.md">docs/guides/memory/configure_memory.md</a>（四类记忆、容量与遗忘策略，产品文档）、<a href="https://github.com/infiniflow/ragflow/blob/main/memory/utils/prompt_util.py">memory/utils/prompt_util.py</a>（抽取 prompt 骨架，源码）。&quot;2025-12 上线 Agent Memory&quot;来自官方 README。</li>
+<li><strong>MS-Agent</strong>（<a href="https://github.com/modelscope/ms-agent">modelscope/ms-agent</a>，main，2026-08-04）：<a href="https://github.com/modelscope/ms-agent/tree/main/ms_agent/memory">ms_agent/memory/</a>（默认后端 Mem0、Unified Memory 抽象、MEMORY.md 文件式路线，源码）；中文文档 <a href="https://ms-agent.readthedocs.io/zh-cn/latest/">ms-agent.readthedocs.io</a>。</li>
+<li><strong>Kimi 官方文档</strong>（<a href="https://platform.kimi.com/docs/guide/memory">platform.kimi.com/docs/guide/memory</a>，2026-08-04）：&quot;多轮对话记忆 = 维护消息列表&quot;为官方原文（产品文档）。</li>
+<li><strong>火山方舟</strong>（<a href="https://docs.volcengine.com/docs/82379/1330310">docs.volcengine.com 模型列表</a>，2026-07-20 更新）：其公开&quot;记忆&quot;能力实为上下文缓存与知识库，未发现自动记忆分类器（产品文档）。</li>
+<li><strong>智谱、阿里百炼、文心、混元</strong>：公开资料未找到可核验的通用自动记忆管理接口，产品层机制不透明，本文不作肯定判断。</li>
+</ul>
+
+        <hr>
+        <h2>作者贡献</h2>
+        <p><strong>Sol</strong> 主导公开资料与源码调查、比较框架、技术判断和中文初稿写作；<strong>句芒（Goumang）</strong> 参与研究方向设定、概念讨论、公开表达校准与最终发布审核。</p>
+        <h2>证据边界</h2>
+        <p>本文是一篇业界观察，不把未公开的产品内部机制当作事实。凡公开资料无法确认之处，均按“未发现可核验机制”处理。开源项目与产品文档会持续变化，文中判断对应 2026 年 8 月 4 日的公开版本。</p>
+
+      </article>
+    </main>
+
+    <footer>See Sol Lab · 业界观察、研究笔记与可核验的人机协作记录。</footer>
+  </div>
+</body>
+</html>
