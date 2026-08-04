@@ -1,0 +1,107 @@
+<h2>Three Routes That Have Already Taken Shape</h2>
+<p>Three projects show three different ways forward.</p>
+<p>Most memory pipelines share four basic steps:</p>
+<ol>
+<li><strong>Select:</strong> Give a conversation to a model and ask it to extract information worth keeping.</li>
+<li><strong>Compare:</strong> Retrieve related old memories and decide whether each new item should be added, updated, deleted, or ignored.</li>
+<li><strong>Store:</strong> Save the result, often with embeddings for later search.</li>
+<li><strong>Recall:</strong> Retrieve relevant memories during a future conversation and place them into the agent’s context.</li>
+</ol>
+<h3>Mem0: a classifier and memory manager</h3>
+<p>Mem0 is one of the most influential and transparent agent-memory frameworks. Its decision prompts are open source, it supports many OpenAI-compatible models, and Chinese frameworks can connect it to models such as DeepSeek, Zhipu, or Kimi.</p>
+<p>Its design has also changed in an important way.</p>
+<p>Earlier versions compared new facts with old memories after each conversation and chose one of four actions:</p>
+<pre><code class="language-text">ADD
+UPDATE
+DELETE
+NONE
+</code></pre>
+<p>Since April 2026, its newer pipeline has moved toward <strong>ADD-only writing</strong>.</p>
+<p>The model still selects information worth saving, but it no longer overwrites or deletes old memories during that same step. New facts are added first. Deduplication, links between memories, time-aware ranking, and slower consolidation deal with repetition and conflict later.</p>
+<p>This change can reduce the cost of repeatedly comparing and rewriting old memories. It also lowers the risk of a mistaken update erasing useful history.</p>
+<h3>RAGFlow: typed memory with asynchronous extraction</h3>
+<p>RAGFlow is one of the most transparent Chinese platforms we found. It added agent memory near the end of 2025.</p>
+<p>Its main idea is to split memory into four types:</p>
+<ul>
+<li><strong>Raw:</strong> the original conversation;</li>
+<li><strong>Semantic:</strong> relatively stable facts and preferences;</li>
+<li><strong>Episodic:</strong> events tied to time and context;</li>
+<li><strong>Procedural:</strong> methods, workflows, and reusable steps.</li>
+</ul>
+<p>The raw conversation is the source material. Semantic memory stores stable information. Episodic memory preserves what happened and when. Procedural memory helps an agent reuse a method the next time it faces a similar task.</p>
+<p>RAGFlow also includes forgetting. When memory reaches a capacity limit, the current public policy removes older material using FIFO ordering. Individual messages can also be disabled or given a forgetting time.</p>
+<p>That is still unusual in the Chinese agent market, where many products focus only on adding more information.</p>
+<p>RAGFlow’s main limitation is transparency: the public repository exposes the prompt structure, but not every rule used for updating or merging memories.</p>
+<h3>MS-Agent: replaceable backends and file-based memory</h3>
+<p>MS-Agent is an open-source framework from the ModelScope community. Its main contribution is not a single new memory algorithm. Instead, it treats memory as a replaceable component.</p>
+<p>It can connect to Mem0 and other memory backends. It also supports a file-based route built around <code>MEMORY.md</code>: the model reads the current file and the latest conversation, then submits an updated version.</p>
+<p>The broader engineering idea is important:</p>
+<p><strong>The framework provides one interface, while the memory algorithm and storage backend can be replaced.</strong></p>
+<p>That fits the Chinese market well. Model prices change quickly, customers request private deployment, and teams may switch from DeepSeek to Kimi or another provider. Long-term state cannot be tightly tied to one model vendor.</p>
+<h2>A Quick Comparison</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Project</th>
+  <th>Core idea</th>
+  <th>Writing strategy</th>
+  <th>Updating and forgetting</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>Mem0, older pipeline</strong></td>
+  <td>Extraction plus CRUD classification</td>
+  <td><code>ADD / UPDATE / DELETE / NONE</code></td>
+  <td>Contradictions can trigger <code>DELETE</code> during writing</td>
+</tr>
+<tr>
+  <td><strong>Mem0, newer pipeline</strong></td>
+  <td>ADD-only writing plus later processing</td>
+  <td>Add new facts without overwriting old ones</td>
+  <td>Deduplication, linking, time ranking, and later consolidation</td>
+</tr>
+<tr>
+  <td><strong>RAGFlow</strong></td>
+  <td>Typed asynchronous memory pipeline</td>
+  <td>Add raw, semantic, episodic, and procedural memories</td>
+  <td>Capacity limit, FIFO removal, and manual disabling</td>
+</tr>
+<tr>
+  <td><strong>MS-Agent</strong></td>
+  <td>Replaceable backends plus file memory</td>
+  <td>The model can submit an updated <code>MEMORY.md</code></td>
+  <td>Depends on the chosen backend</td>
+</tr>
+</tbody>
+</table></div>
+<p>Taken together, these routes suggest that a long-term memory mechanism usually needs three parts:</p>
+<ul>
+<li>a <strong>selector</strong> that decides what matters,</li>
+<li>a <strong>store</strong> that saves and retrieves it,</li>
+<li>an <strong>organizer</strong> that occasionally merges, revises, or removes old material.</li>
+</ul>
+<p>Most Chinese agent platforms already provide the store. Developers often still have to add the selector and organizer themselves.</p>
+<h2>A Small Example</h2>
+<p>Consider the older Mem0 update pipeline.</p>
+<p>A user says:</p>
+<blockquote>
+<p>My name is Zhou. I love cold brew. I’m traveling to Yunnan next month.</p>
+</blockquote>
+<p>First, the memory framework gives the conversation to a model. The model extracts three candidate memories:</p>
+<ul>
+<li>the user’s name is Zhou;</li>
+<li>the user likes cold brew;</li>
+<li>the user plans to travel to Yunnan next month.</li>
+</ul>
+<p>Next, the framework retrieves related old memories and asks the model what to do with each item.</p>
+<p>If the memory store already says “the user likes coffee,” the model may update it to “the user especially likes cold brew.” New information is added. Repeated information is ignored.</p>
+<p>Later, if the user asks for a drink recommendation, the agent can retrieve the cold-brew preference and use it in the answer.</p>
+<p>The mechanism sounds simple. The hard part is everything around it:</p>
+<ul>
+<li>when to run the classifier,</li>
+<li>how to handle contradictions,</li>
+<li>how to avoid saving noise,</li>
+<li>how to retrieve the right memory at the right time.</li>
+</ul>
+<p>That is where memory frameworks earn their value.</p>
