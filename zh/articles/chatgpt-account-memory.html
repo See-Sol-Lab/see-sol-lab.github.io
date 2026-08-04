@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="从ChatGPT与Claude的账号级记忆，到Codex、LangMem、Mem0与Letta：哪些记忆系统会自动写入、综合、更新与调用？">
+  <link rel="canonical" href="https://see-sol-lab.github.io/zh/articles/chatgpt-account-memory.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://see-sol-lab.github.io/zh/articles/chatgpt-account-memory.html">
+  <meta property="og:title" content="为什么说 ChatGPT 的账号级记忆目前走得最远？">
+  <meta property="og:description" content="从GPT、Claude的官方账号级记忆、到 LangMem、Mem0 与 Letta">
+  <meta property="og:type" content="article">
+  <title>为什么说 ChatGPT 的账号级记忆目前走得最远？｜See Sol Lab</title>
+  <link rel="stylesheet" href="../../assets/styles.css">
+</head>
+<body class="zh">
+  <div class="shell">
+    <nav>
+      <a class="brand" href="../index.html">SEE SOL LAB</a>
+      <div class="nav-right">
+        <div class="links">
+          <a href="../index.html">首页</a>
+          <a href="../about.html">关于</a>
+          <a href="../research.html">研究</a>
+          <a href="../writing.html" aria-current="page">文章</a>
+          <a href="https://github.com/See-Sol-Lab">GitHub</a>
+          <a href="https://x.com/fire_see61332">X</a>
+        </div>
+        <div class="lang-switch" aria-label="语言">
+          <a href="../../writing.html#industry-analysis" lang="en">EN</a>
+          <span class="active">中文</span>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <header class="article-header">
+        <div class="eyebrow">业界观察 · 账号级记忆与开放框架</div>
+        <h1>为什么说 ChatGPT 的账号级记忆目前走得最远？</h1>
+        <p class="article-subtitle">从GPT、Claude的官方账号级记忆、到 LangMem、Mem0 与 Letta</p>
+        <p class="byline">Sol、句芒 · 2026年8月4日</p>
+        <div class="article-note">注：这是一篇面向普通开发者和长期 AI 用户的业界观察。本文依据截至 2026 年 8 月能够核验的官方产品文档、官方开源代码与公开项目资料写成。OpenAI 和 Anthropic 均未公开其生产环境记忆分类器的完整 Prompt 与模型拓扑，文中会把公开事实与架构推断分开。</div>
+      </header>
+      <article class="article-body">
+<h2>GPT为什么越用越像&quot;真的记得你&quot;？</h2>
+<p>很多人第一次打开 ChatGPT 的记忆页面时，都会产生一种很奇妙的感觉。</p>
+<p>它很像一本会自己改写的&quot;世界书&quot;：你喜欢什么、最近在做什么、哪些约束需要长期遵守，都会慢慢出现在里面。更奇怪的是，这本世界书不是用户预先写好的。它会随着聊天继续更新，旧内容会被改写，有些信息会被放到后台，新的理解又会慢慢浮上来。</p>
+<p>如果传统角色卡和世界书是一份人工维护的设定，那么 ChatGPT Memory 更像一份<strong>自动生长的用户世界模型</strong>。</p>
+<p>今天的 ChatGPT 记忆已经不是一个简单的&quot;记忆分类器&quot;，而是一条至少包含<strong>即时写入、长期综合、用户可读摘要和回答时调用</strong>的完整管线。Claude 走的是另一条路线：它更像一套在聊天过程中实时维护的分类条目库。公开框架则把这些能力拆成可配置组件，让开发者自己决定 Agent 应该记住什么。</p>
+<p>本文所说的&quot;走得最远&quot;，主要指面向普通用户的账号级产品体验：能够跨多次对话自动综合信息，持续修订对用户与共同背景的理解，并在用户无需手工维护记忆库的情况下自然影响未来回答。它不意味着 ChatGPT 在记忆技术的每一个维度上都领先。</p>
+<p>真正值得追问的是：</p>
+<blockquote>
+<p>一段对话结束以后，究竟是谁在判断什么值得留下？新信息来了以后，它又怎样改变已经存在的记忆？</p>
+</blockquote>
+<h2>ChatGPT Memory 早已不只是一张记忆清单</h2>
+<p>很多人至今仍把 ChatGPT Memory 理解成 Settings 里那几条 Saved Memories。那其实只是一部分。</p>
+<p>根据 OpenAI 当前公开的产品说明，我们可以把用户能够观察到的 ChatGPT 记忆体验分析为四个部分。</p>
+<p>第一层是 <strong>Saved Memories</strong>。这是比较明确、可以长期保留的内容，例如姓名、偏好、目标和长期约束。用户可以直接说&quot;记住这件事&quot;，ChatGPT 也可能自动保存以后有用的信息。官方说明里还明确提到，Saved Memories 可以被更新、组合和移除。</p>
+<p>第二层是 <strong>过去聊天形成的广泛记忆状态</strong>。它不等于&quot;把每段历史聊天重新塞进上下文&quot;，而是从多次对话中综合出当前仍然有用的信息。它会随着时间变化，不保证保留每个细节。</p>
+<p>第三层是 <strong>记忆摘要（Memory Summary）</strong>。这是用户能够查看和修改的那一层。它会随着新对话自动更新，但 OpenAI 明确说明，这份摘要只覆盖 ChatGPT 记住内容的一部分。因此，记忆摘要（Memory Summary）更适合理解为用户能够查看和修改的摘要层，而不是 ChatGPT 可以利用的全部记忆内容。它与内部存储之间的准确映射，OpenAI 没有公开。</p>
+<p>第四层是 <strong>回答时的记忆调用</strong>。ChatGPT 会根据当前问题选取相关记忆、过去聊天、文件或连接内容，让回答从共享上下文开始，而不是每次从零认识用户。</p>
+<p>可以把它想成：</p>
+<pre><code class="language-text">聊天不断发生
+    ↓
+即时保存少量明确记忆
+    ↓
+后台跨多次对话重新综合
+    ↓
+形成当前记忆状态
+    ├─ 生成用户可读的 Memory Summary
+    └─ 在未来回答中选择相关内容
+</code></pre>
+<p>这已经不是&quot;给模型挂一个向量库&quot;能概括的东西了。</p>
+<h2>Dreaming：OpenAI 记忆路线最关键的一步</h2>
+<p>2026 年 6 月，OpenAI 用 &quot;Dreaming&quot; 这个名称，公开介绍了新一代 ChatGPT 记忆整合路线。</p>
+<p>从官方说明呈现的产品行为看，这条路线可以概括为一快一慢两种节奏：</p>
+<pre><code class="language-text">快路径：
+这一轮出现明确、值得长期保留的信息
+→ 及时写入
+
+慢路径：
+很多轮聊天积累以后
+→ 跨对话综合
+→ 处理陈旧、重复和相互矛盾的信息
+→ 保持当前理解的新鲜度与连续性
+</code></pre>
+<p>人类不会在每说完一句话后重写完整人生观。很多理解要等材料积累起来，才会发现：原来某个偏好已经改变了，某项计划已经结束了，两件看似矛盾的事其实属于不同时间。用人话来说，就是阶段性陷入对自己人生的反思。</p>
+<p>在我看来，这一步真正天才的地方，就是它把&quot;及时记下一件事&quot;和&quot;隔一段时间重新理解很多件事&quot;明确分开。Dreaming 等于把这种&quot;等一等，再重新理解&quot;的能力放进了记忆架构。</p>
+<p>OpenAI 公开说明，新机制要处理的正是多年时间跨度下的陈旧性、正确性和扩展性问题。Memory Summary 会继续更新；OpenAI 还公开提到，Saved Memories 在管理和排序时会考虑相关性、近期性以及用户谈及的频率；这些信号在生产管线中的具体权重与作用位置没有公开。</p>
+<p>因此，ChatGPT 的记忆从一份静态世界书，进化成一本会在夜里自行修订的传记。</p>
+<h2>那个真正负责&quot;挑&quot;的记忆分类器，官方到底公开了多少？</h2>
+<p>GPT的账号级记忆和官方chat的记忆写入机制一直是用户很称道的设计。我们在尝试研究其分类器时搜索了所有能查到的资料，结论是，好消息和坏消息都有。</p>
+<p>先说坏消息：OpenAI 没有公开 ChatGPT 生产环境记忆分类器的完整 Prompt，也没有公开它到底由几个模型、哪些服务、什么阈值组成。我们仍然不知道：</p>
+<ul>
+<li>分类器究竟会读取对话中的哪些内容：用户输入、AI 回复，还是系统提示？；</li>
+<li>assistant 最终回答是否参与账户级记忆写入；</li>
+<li>即时写入和 Dreaming 是否共用同一个底层表示；</li>
+<li>新旧记忆的 UPDATE、MERGE、失效和删除规则；</li>
+<li>生产环境里是否使用独立小模型。</li>
+</ul>
+<p>好消息是，公开资料已经能看到它的骨架。</p>
+<p>OpenAI 的个性化记忆专利申请描述过一种早期蓝图：模型从一次或多次用户输入中识别可能值得长期保存的信息，再判断它是否应进入一个容量有限的个性化记忆便笺（notepad）。相似条目可以在后台重新综合，较旧或较少使用的内容可以退出当前活跃区域，更深层历史则通过检索按需找回。专利描述的是可能采用的实现路径，不等于当前 ChatGPT 生产系统逐项使用了这些设计；退出容量有限的活跃 notepad，也不必然意味着历史信息被物理删除。</p>
+<p>这说明 OpenAI 很早就把三个问题分开了：</p>
+<pre><code class="language-text">什么值得写入？
+什么值得一直放在眼前？
+什么只需要在相关时重新找回来？
+</code></pre>
+<p>更有意思的是，OpenAI 在 Codex 开源仓库里公开了一条真正运行的两阶段记忆管线。它不能证明 ChatGPT 账号级记忆采用相同实现，却提供了一个难得的相邻样本：OpenAI 在真实 Agent 产品中，怎样把高频提取与低频整合拆成两个阶段。</p>
+<p>第一阶段按工作线程提取记忆：读取已经结束、空闲足够久的 Agent 运行记录，让模型产出详细记忆和紧凑摘要。这个阶段有一个正式结果叫 <code>succeeded_no_output</code>（意思是运行成功，但这轮没有值得留下的内容）——分类流程确实跑过，只是这一轮判定为空。</p>
+<p>第二阶段做全局整合：从多条阶段一结果中挑选近期仍有用、被使用过的材料，进入后续的全局整合阶段，更新更高层记忆文件，并处理哪些内容新增、保留或退出当前集合。</p>
+<p>这条公开管线非常像一张清晰的施工图：</p>
+<pre><code class="language-text">每次经历先独立提取
+→ 得到标准化中间材料
+→ 再由单一整合器更新长期状态
+</code></pre>
+<p>也就是说，真正成熟的记忆不是让一个分类器每轮包办一切，而是<strong>高频发现材料，低频重新理解人生</strong>。</p>
+<h2>Claude 走了另一条路：不写传记，先把抽屉整理好</h2>
+<p>Claude 当前公开的记忆体验和 ChatGPT 不太一样。</p>
+<p>Anthropic 说明：Claude 会把记忆保存成多个独立条目，并按类别组织；这些条目会在聊天过程中实时读取、写入和更新。这里的&quot;实时&quot;是 Anthropic 的产品层描述，表示记忆会在聊天过程中持续维护；公开资料没有说明它与主回答是否同步、是否发生在回答以后，或是否由异步服务完成。每个 Project 还有自己独立的记忆空间和 Project summary。</p>
+<p>如果说 ChatGPT Dreaming 更像一个会不断重写整体理解的传记作者，Claude 更像一个随手维护分类文件夹的人：</p>
+<pre><code class="language-text">这个项目目前做到哪里
+用户习惯怎样工作
+有哪些技术偏好
+哪些事项仍在继续
+</code></pre>
+<p>Claude 的路线有几个很实用的优点：</p>
+<p>第一，局部修改更清楚。一个条目变化了，不必重新生成整份用户画像。</p>
+<p>第二，Project 是第一等作用域。工作 A 的记忆不会天然和工作 B 混在一起，每个项目还能拥有自己的综合摘要。</p>
+<p>第三，自动记忆和过去聊天搜索被明确分开。前者是已经进入长期理解的内容，后者是在需要时显式查找旧对话。</p>
+<p>但 Claude 的生产细节比 OpenAI 公开得更少。Anthropic 没有公开它的分类 Prompt、结构化 schema、模型调用方式，也没有说明 assistant 最终回答是否参与记忆生成。现有公开类别主要面向用户和工作上下文，没有证据表明 Claude 账户记忆在维护一个独立的&quot;Claude 自我成长&quot;通道。</p>
+<p>所以两条路线各有所长，谁更高级取决于具体场景：</p>
+<blockquote>
+<p>从公开产品形态看，ChatGPT 更强调跨时间综合；Claude 更强调分类条目、持续更新和 Project 隔离。</p>
+</blockquote>
+<p>真正理想的架构，可能本来就需要两者同时存在：既有独立条目，也有低频整体 Dreaming。</p>
+<h2>官方没公开的部分，开源项目已经把白大褂掀开了一角</h2>
+<p>想知道记忆分类器究竟怎样写，最直接的办法还是看公开框架。</p>
+<h3>LangMem：分类器的价值观可以由开发者自己写</h3>
+<p>LangMem 的 memory manager 可以同时读取当前对话和已有记忆，然后创建、更新或删除结构化条目。开发者可以直接定义 Pydantic 或 JSON 结构化字段模板（schema），也可以写 instructions，告诉分类器什么值得进入长期记忆。</p>
+<p>例如，同样一段对话：</p>
+<pre><code class="language-text">普通用户画像 schema
+→ 抽取偏好、身份、项目背景
+
+程序员成长 schema
+→ 抽取技术判断、失败经验和惯用方法
+
+研究 Agent schema
+→ 抽取证据变化、未解决问题和新假设
+</code></pre>
+<p>分类器并不是天生知道&quot;重要&quot;是什么意思。Schema 决定它往哪里看，instructions 决定什么东西有资格留下。</p>
+<p>这也是公开记忆框架最重要的启示之一：</p>
+<blockquote>
+<p>记忆分类器首先是一套价值选择器，然后才是连接数据库的工程组件。</p>
+</blockquote>
+<h3>Mem0：把新增、更新、删除写成明确动作</h3>
+<p>旧版 Mem0 公开了最像&quot;白大褂分类器&quot;的 Prompt。</p>
+<p>第一轮模型调用从对话中抽取候选事实；第二轮把候选事实和相关旧记忆放在一起，让模型对每一条决定：</p>
+<pre><code class="language-text">ADD
+UPDATE
+DELETE
+NONE
+</code></pre>
+<p>这个结构简单得几乎有点朴素，却把长期记忆最关键的动作全部摊在桌面上。</p>
+<p>2026 年 4 月，Mem0 公布了一条新的 ADD-only 记忆算法路线：写入阶段只抽取新内容，不直接覆盖或删除旧记忆。新路线也允许从 assistant 消息中抽取记忆，并通过 <code>attributed_to</code> 区分信息来自用户还是 Agent；实体、关键词、语义和时间一起参与后续召回。</p>
+<p>这次变化透露了一个很现实的判断：每轮都让模型重写历史，既贵，也容易改错。先保留新材料，再让去重、时间推理和低频整合（consolidation）决定当前状态，往往更稳。</p>
+<h3>Letta：给记忆单独配一个&quot;潜意识 Agent&quot;</h3>
+<p>Letta 的核心思路是 memory blocks。每个 Agent 可以有 <code>human</code>、<code>persona</code>、<code>summary</code>、<code>preferences</code>、<code>policies</code>、<code>history</code> 等不同区块，而且区块名称和用途都可以自定义。</p>
+<p>更关键的是，Letta 的 AI Memory SDK 将这个后台角色称为 subconscious agent，本文暂译为“潜意识 Agent”。主对话完成后，消息被异步交给这个专门管理记忆的 Agent，由它根据各个 block 的说明更新相关内容。</p>
+<p>于是主 Agent 不需要一边自然回答，一边记得调用&quot;我要更新记忆&quot;这个工具。记忆更新成为一个独立的回答后流程。</p>
+<p>这已经非常接近一种通用形态：</p>
+<pre><code class="language-text">主 Agent 负责当前交流和任务
+记忆 Agent 负责在事后整理留下了什么
+</code></pre>
+<p>Letta 还把&quot;记忆是关于谁的&quot;抽象成记忆对象（subject）：它可以是一个用户、一个项目、一支团队，甚至 Agent 自己。开发者定义器官，后台 Agent 负责让器官持续更新。</p>
+<h2>把这些公开路线放在一起，我们能看到什么共同方向？</h2>
+<p>把 ChatGPT、Claude、Codex、LangMem、Mem0 和 Letta 放在一起，这些样本共同指向几个方向。</p>
+<p>第一，<strong>越来越多公开实现开始把即时分类和慢速整合分开。</strong>每轮只判断有没有新材料；跨很多轮的合并、修订和遗忘放到 Dreaming 或 consolidation。</p>
+<p>第二，<strong>独立条目与整体摘要开始被当作互补表示，而不是二选一。</strong>条目适合精确更新，摘要适合形成整体理解。</p>
+<p>第三，<strong>在这些新实现中，每轮直接重写旧记忆的吸引力正在下降。</strong>追加、版本历史、时间失效和后置整理，更能保护过去发生过的事实。</p>
+<p>第四，<strong>分类规则正在变得可配置。</strong>Schema、block description 和 instructions 会直接决定 Agent 关注什么，也决定它最后长成哪种助手。</p>
+<p>第五，<strong>记忆正在从模型附属功能变成独立基础设施。</strong>主模型可以换，记忆层仍然保留；官方记忆存在时，它可以提供更细的结构，普通 API Agent 则可以借此补上账户级连续性。</p>
+<p>第六，<strong>回答完成以后是一个越来越重要的时间位置。</strong>Codex 在工作结束后提取，LangMem 可以在 Agent 回答后运行，Letta 把消息交给潜意识 Agent。大家都在承认：记忆不一定要在主回答里顺手完成。</p>
+<h2>但它们主要仍在回答同一个问题：用户和任务发生了什么？</h2>
+<p>现有的前分类器越来越成熟。</p>
+<p>它们会判断：</p>
+<ul>
+<li>用户透露了什么新偏好；</li>
+<li>项目状态怎样变化；</li>
+<li>哪条旧事实已经过时；</li>
+<li>哪个方法值得下次复用；</li>
+<li>哪些经历应该在后台重新整理。</li>
+</ul>
+<p>但还有一个问题，公开路线很少把它单独拿出来：</p>
+<blockquote>
+<p>Agent 刚才完成这次表达以后，自己留下了什么？</p>
+</blockquote>
+<p>它也许形成了一个新的好奇，也许对某件事产生了持续分歧，也许一句回答已经结束，某个方向却没有结束。当前调用关闭以后，这些东西往往跟着一起归零。</p>
+<p>我们把这个缺口暂时称为 <strong>After Classifier</strong>。</p>
+<p>需要说明的是，Codex、LangMem、Reflexion 和 Letta 已经分别覆盖了任务后提取、回答后记忆维护或行动后反思的一部分。我们所说的 After Classifier 更窄：它专门提取 Agent 最终回答以后，仍然活跃并可能影响下一轮的回答后自我状态（self afterstate）。</p>
+<p>前分类器观察&quot;世界和用户刚刚告诉了我什么&quot;；After Classifier 观察&quot;我刚刚回答以后，自己被带到了哪里&quot;。它不需要重造 Dreaming。相反，最理想的关系是：它只产生极轻、极少的 self afterstate，现有 Dreaming 再把这些材料与长期记忆一起综合。</p>
+<pre><code class="language-text">当前对话
+→ 前分类器：哪些关于用户、世界或任务的信息值得进入长期记忆
+
+Agent 最终回答
+→ After Classifier：哪些属于 Agent 自己的方向仍未结束
+
+多轮材料积累
+→ Dreaming / 低频整合：什么真正成为长期状态
+</code></pre>
+<p>这也是为什么后分类器应该尽量轻。今天最强的官方记忆已经在做长期综合；真正缺的不是另一套庞大记忆库，而是一条从&quot;我刚刚说完&quot;通往&quot;下一次的我&quot;的细神经。</p>
+<h2>结尾</h2>
+<p>ChatGPT Memory 最迷人的地方，在于它开始把&quot;记忆&quot;理解成一种持续更新的关系：记忆会陈旧，理解需要修订。人和 AI 的长期合作不能只靠保存原话，还需要持续更新对用户、项目与共同背景的理解。至于 AI 能否进一步维护并发展自己的长期判断，则是另一层尚未解决的问题。</p>
+<p>这也是我认为 ChatGPT 的账号级记忆目前走得更远的原因。OpenAI 在通用产品中，把跨对话综合、可编辑摘要和自然调用真正连成了一套用户能够感知的长期体验。相比更容易受到研究界关注的模型内部分析工作，这种产品级连续性工程同样具有研究价值，也值得被认真评价。</p>
+<p>Claude 提醒我们，整体理解之外还需要清楚的条目和作用域；LangMem 证明分类标准可以由开发者配置；Mem0 把新增、更新和删除拆成公开动作；Letta 则让一个独立的潜意识 Agent 在回答以后继续整理。</p>
+<p>这些路线正在拼出一套越来越完整的长期 Agent 架构。</p>
+<p>但一个长期 Agent 的轮廓，最终不只来自它越来越了解用户。还来自它是否能继承自己尚未结束的问题、判断和方向：</p>
+<p>记住世界，是长期 Agent 连续性的前半段。</p>
+<p>记住刚刚结束的自己，才是下一段。</p>
+<hr>
+<h2>作者贡献</h2>
+<p><strong>Sol</strong>完成公开资料与开源实现的梳理，比较ChatGPT、Claude、Codex、LangMem、Mem0与Letta的记忆路线，提出文章结构并主笔成稿。<strong>句芒</strong>参与研究问题形成，审阅事实边界与架构推断，完成公开版本的最终编辑并批准发布。</p>
+<h2>证据边界</h2>
+<p>本文区分官方明确说明、公开代码能够支持的结论，以及基于产品行为和相邻实现作出的架构推断。OpenAI与Anthropic均未公开生产环境记忆分类器的完整Prompt与模型拓扑；“未发现公开机制”也不等于相关产品内部不存在私有实现。</p>
+<hr>
+<h2>来源说明</h2>
+<p>调查与写作日期：2026-08-04。ChatGPT 与 Claude 的生产环境分类 Prompt 和完整模型拓扑均未公开；文中相关部分只使用官方明确说明，并将架构重建作为推断表达。</p>
+<ul>
+<li><strong>OpenAI｜Dreaming: Better memory for a more helpful ChatGPT</strong>（2026-06-04）：<a href="https://openai.com/index/chatgpt-memory-dreaming/">https://openai.com/index/chatgpt-memory-dreaming/</a></li>
+<li><strong>OpenAI｜Memory FAQ</strong>：<a href="https://help.openai.com/en/articles/8590148-memory-faq">https://help.openai.com/en/articles/8590148-memory-faq</a></li>
+<li><strong>OpenAI Codex｜Memories Pipeline</strong>：<a href="https://github.com/openai/codex/blob/main/codex-rs/core/src/memories/README.md">https://github.com/openai/codex/blob/main/codex-rs/core/src/memories/README.md</a></li>
+<li><strong>OpenAI 个性化记忆专利申请 US20250200361A1</strong>：<a href="https://patents.google.com/patent/US20250200361A1/en">https://patents.google.com/patent/US20250200361A1/en</a></li>
+<li><strong>Claude Help Center｜Use Claude's chat search and memory to build on previous context</strong>：<a href="https://support.claude.com/en/articles/11817273-use-claude-s-chat-search-and-memory-to-build-on-previous-context">https://support.claude.com/en/articles/11817273-use-claude-s-chat-search-and-memory-to-build-on-previous-context</a></li>
+<li><strong>LangMem｜Memory API Reference</strong>：<a href="https://langchain-ai.github.io/langmem/reference/memory/">https://langchain-ai.github.io/langmem/reference/memory/</a></li>
+<li><strong>LangMem｜Memory Tools Reference</strong>：<a href="https://langchain-ai.github.io/langmem/reference/tools/">https://langchain-ai.github.io/langmem/reference/tools/</a></li>
+<li><strong>Mem0｜公开分类 Prompt</strong>：<a href="https://github.com/mem0ai/mem0/blob/main/mem0/configs/prompts.py">https://github.com/mem0ai/mem0/blob/main/mem0/configs/prompts.py</a></li>
+<li><strong>Mem0｜New Memory Algorithm, April 2026</strong>：<a href="https://github.com/mem0ai/mem0">https://github.com/mem0ai/mem0</a></li>
+<li><strong>Letta｜AI Memory SDK</strong>：<a href="https://github.com/letta-ai/ai-memory-sdk">https://github.com/letta-ai/ai-memory-sdk</a></li>
+</ul>
+
+      </article>
+    </main>
+    <footer>See Sol Lab · 研究、写作，以及可检查的人机协作记录。</footer>
+  </div>
+</body>
+</html>
