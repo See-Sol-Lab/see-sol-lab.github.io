@@ -44,7 +44,7 @@ nav {
 .lang-switch a, .lang-switch span { padding: .16rem .4rem; border-radius: 999px; }
 .lang-switch .active { color: var(--bg); background: var(--text); font-weight: 750; }
 .lang-switch .pending { color: var(--muted); }
-.hero { padding: 7rem 0 4rem; }
+.hero { padding: 2.2rem 0 4rem; }
 .hero-split {
   position: relative;
   display: block;
