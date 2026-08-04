@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">See Sol Lab star-core emblem</title>
+  <desc id="desc">A silver-blue luminous star core with two incomplete orbital rings and two nodes.</desc>
+  <defs>
+    <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="1"/>
+      <stop offset="0.14" stop-color="#c9f5ff" stop-opacity=".95"/>
+      <stop offset="0.38" stop-color="#7dcfff" stop-opacity=".62"/>
+      <stop offset="0.7" stop-color="#728cff" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#728cff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="silverBlue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff3c9"/>
+      <stop offset=".18" stop-color="#d9efff"/>
+      <stop offset=".52" stop-color="#7ea8ff"/>
+      <stop offset=".8" stop-color="#f0f5ff"/>
+      <stop offset="1" stop-color="#ffdba3"/>
+    </linearGradient>
+    <linearGradient id="starFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#eef7ff" stop-opacity=".96"/>
+      <stop offset=".46" stop-color="#7faeff" stop-opacity=".58"/>
+      <stop offset="1" stop-color="#2e477f" stop-opacity=".88"/>
+    </linearGradient>
+    <radialGradient id="nodeFill" cx="35%" cy="28%" r="72%">
+      <stop offset="0" stop-color="#f8fbff"/>
+      <stop offset=".2" stop-color="#a6c8ff"/>
+      <stop offset=".62" stop-color="#4d5fae"/>
+      <stop offset="1" stop-color="#171d51"/>
+    </radialGradient>
+    <filter id="glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="10" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <circle cx="256" cy="256" r="190" fill="none" stroke="#8fa9ff" stroke-opacity=".08" stroke-width="1" stroke-dasharray="2 8"/>
+  <circle cx="256" cy="256" r="148" fill="url(#coreGlow)" opacity=".34"/>
+
+  <g fill="none" stroke-linecap="round">
+    <ellipse cx="256" cy="256" rx="191" ry="151" transform="rotate(-18 256 256)" stroke="url(#silverBlue)" stroke-width="5.5" stroke-dasharray="810 200" stroke-dashoffset="55" opacity=".92" filter="url(#softGlow)"/>
+    <ellipse cx="256" cy="256" rx="151" ry="190" transform="rotate(22 256 256)" stroke="url(#silverBlue)" stroke-width="3.2" stroke-dasharray="710 230" stroke-dashoffset="190" opacity=".78"/>
+    <ellipse cx="256" cy="256" rx="205" ry="164" transform="rotate(-18 256 256)" stroke="#b5c9ff" stroke-width="1.2" stroke-dasharray="480 500" stroke-dashoffset="-24" opacity=".28"/>
+  </g>
+
+  <g filter="url(#softGlow)">
+    <path d="M256 98 C278 185 326 232 414 256 C326 279 279 327 256 414 C233 327 185 279 98 256 C185 233 233 185 256 98 Z" fill="url(#starFill)" stroke="#e9f3ff" stroke-width="7"/>
+    <path d="M256 136 C272 203 309 240 376 256 C309 272 272 309 256 376 C240 309 203 272 136 256 C203 240 240 203 256 136 Z" fill="#172a61" fill-opacity=".58" stroke="#8fd5ff" stroke-width="3.5"/>
+    <path d="M256 171 C267 218 294 245 341 256 C294 267 267 294 256 341 C245 294 218 267 171 256 C218 245 245 218 256 171 Z" fill="url(#coreGlow)" stroke="#d8f7ff" stroke-width="2"/>
+    <path d="M256 112 V400 M112 256 H400" stroke="#d8f8ff" stroke-width="1.4" opacity=".72"/>
+    <circle cx="256" cy="256" r="18" fill="url(#coreGlow)" filter="url(#glow)"/>
+    <circle cx="256" cy="256" r="6" fill="#ffffff"/>
+  </g>
+
+  <g filter="url(#softGlow)">
+    <circle cx="386" cy="154" r="23" fill="url(#nodeFill)" stroke="#eef5ff" stroke-width="4"/>
+    <circle cx="386" cy="154" r="16" fill="none" stroke="#8eb6ff" stroke-width="1.5" opacity=".8"/>
+    <circle cx="386" cy="154" r="4" fill="#ffffff" opacity=".9"/>
+
+    <circle cx="125" cy="354" r="21" fill="url(#nodeFill)" stroke="#eef5ff" stroke-width="4"/>
+    <circle cx="125" cy="354" r="14" fill="none" stroke="#8eb6ff" stroke-width="1.5" opacity=".8"/>
+    <circle cx="125" cy="354" r="3.7" fill="#ffffff" opacity=".9"/>
+  </g>
+</svg>
