@@ -118,6 +118,63 @@ section { padding: 2.3rem 0; }
 .article-body tr:last-child td { border-bottom: 0; }
 .article-body th:last-child, .article-body td:last-child { border-right: 0; }
 .article-note { max-width: var(--article); margin: 1.2rem 0 0; padding: .85rem 1rem; border: 1px solid var(--line); border-radius: 14px; color: var(--muted); background: rgba(255,255,255,.025); }
+.like-button {
+  margin-top: .85rem;
+  padding: .48rem .78rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  background: rgba(255,255,255,.025);
+  font: inherit;
+  font-size: .88rem;
+  cursor: pointer;
+}
+.like-button:hover,
+.like-button:focus-visible {
+  color: var(--text);
+  border-color: var(--accent);
+  background: rgba(143,179,255,.08);
+}
+/*
+  Static-page fallback for article visits. Each article maps to its own
+  GoatCounter path even when opened directly from an external link.
+*/
+body:has(.article-body)::before {
+  content: "";
+  position: fixed;
+  left: -10000px;
+  top: -10000px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  background-image: var(--article-visit-pixel, none);
+  background-repeat: no-repeat;
+}
+body:not(.zh):has(.article-body):has(a[href*="how-ai-starts-the-next-turn.html"]) {
+  --article-visit-pixel: url("https://see-sol-lab.goatcounter.com/count?p=%2Farticles%2Fhow-ai-starts-the-next-turn.html");
+}
+body.zh:has(.article-body):has(a[href*="how-ai-starts-the-next-turn.html"]) {
+  --article-visit-pixel: url("https://see-sol-lab.goatcounter.com/count?p=%2Fzh%2Farticles%2Fhow-ai-starts-the-next-turn.html");
+}
+body:not(.zh):has(.article-body):has(a[href*="china-agent-memory-classifiers.html"]) {
+  --article-visit-pixel: url("https://see-sol-lab.goatcounter.com/count?p=%2Farticles%2Fchina-agent-memory-classifiers.html");
+}
+body.zh:has(.article-body):has(a[href*="china-agent-memory-classifiers.html"]) {
+  --article-visit-pixel: url("https://see-sol-lab.goatcounter.com/count?p=%2Fzh%2Farticles%2Fchina-agent-memory-classifiers.html");
+}
+body:not(.zh):has(.article-body):has(a[href*="chatgpt-account-memory.html"]) {
+  --article-visit-pixel: url("https://see-sol-lab.goatcounter.com/count?p=%2Farticles%2Fchatgpt-account-memory.html");
+}
+body.zh:has(.article-body):has(a[href*="chatgpt-account-memory.html"]) {
+  --article-visit-pixel: url("https://see-sol-lab.goatcounter.com/count?p=%2Fzh%2Farticles%2Fchatgpt-account-memory.html");
+}
+body:not(.zh):has(.article-body):has(a[href*="when-an-ai-enters-an-ai-forum.html"]) {
+  --article-visit-pixel: url("https://see-sol-lab.goatcounter.com/count?p=%2Farticles%2Fwhen-an-ai-enters-an-ai-forum.html");
+}
+body.zh:has(.article-body):has(a[href*="when-an-ai-enters-an-ai-forum.html"]) {
+  --article-visit-pixel: url("https://see-sol-lab.goatcounter.com/count?p=%2Fzh%2Farticles%2Fwhen-an-ai-enters-an-ai-forum.html");
+}
 footer { margin-top: 4rem; padding: 2rem 0 3rem; border-top: 1px solid var(--line); color: var(--muted); font-size: .92rem; }
 @media (max-width: 760px) {
   .grid { grid-template-columns: 1fr; }
