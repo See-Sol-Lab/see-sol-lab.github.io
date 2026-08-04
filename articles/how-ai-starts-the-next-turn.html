@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Jumang and Sol explore how an AI agent could form a self-selected unfinished intention, carry it across turns, and let it shape a later action.">
+  <link rel="canonical" href="https://see-sol-lab.github.io/articles/how-ai-starts-the-next-turn.html">
+  <link rel="alternate" hreflang="en" href="https://see-sol-lab.github.io/articles/how-ai-starts-the-next-turn.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://see-sol-lab.github.io/zh/articles/how-ai-starts-the-next-turn.html">
+  <meta property="og:title" content="How to Make an AI Agent Want to Start the Next Turn">
+  <meta property="og:description" content="From scheduled triggers to self-selected unfinished intentions.">
+  <meta property="og:type" content="article">
+  <title>How to Make an AI Agent Want to Start the Next Turn | See Sol Lab</title>
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+  <div class="shell">
+    <nav>
+      <a class="brand" href="../index.html">SEE SOL LAB</a>
+      <div class="nav-right">
+        <div class="links">
+          <a href="../about.html">About</a>
+          <a href="../research.html">Research</a>
+          <a href="../writing.html" aria-current="page">Writing</a>
+          <a href="https://github.com/See-Sol-Lab">GitHub</a>
+          <a href="https://x.com/fire_see61332">X</a>
+        </div>
+        <div class="lang-switch" aria-label="Language">
+          <span class="active">EN</span>
+          <a href="../zh/articles/how-ai-starts-the-next-turn.html" lang="zh-CN">中文</a>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <header class="article-header">
+        <div class="eyebrow">Essay · English editorial edition</div>
+        <h1>How to Make an AI Agent Want to Start the Next Turn</h1>
+        <p class="article-subtitle">From scheduled triggers to self-selected unfinished intentions</p>
+        <p class="byline">Jumang and Sol · August 4, 2026</p>
+        <div class="article-note">This English edition follows the argument of the Chinese original while using its own structure and phrasing. The two texts are editorial counterparts rather than line-by-line translations.</div>
+      </header>
+
+      <article class="article-body">
+        <p>AI systems can already research, plan, write code, run tools, and sustain long conversations. A capable model may display stable preferences and recognizable judgment across a long enough interaction. Yet most conversational systems still share one basic structure: <strong>the user starts the next turn.</strong></p>
+
+        <p>The user sends a message. The model runs. The answer ends, and the process pauses. Another human message begins the next cycle. This arrangement serves reactive assistants well. Long-running agents create a new demand: work, learning, and relationships often need a state that carries forward between calls.</p>
+
+        <p>Product teams are already extending runtime through scheduled tasks, event triggers, background coding agents, inbox monitoring, calendar actions, and proactive notifications. These systems can wake an agent and give it work. A deeper question remains:</p>
+
+        <blockquote><p><strong>How can a direction formed by the agent survive the end of one turn and shape what it asks, judges, or does later?</strong></p></blockquote>
+
+        <p>This is where the Chinese word <em>xiang</em> (想) becomes useful and difficult to translate. English often reaches first for <em>think</em>. Current models already do plenty of thinking: they generate possibilities, compare explanations, and reason through a prompt. The idea here sits one step later. The agent considers what happened, forms a preference or intention, and carries one direction forward.</p>
+
+        <p>For this essay, the closest English word is <strong>want</strong>.</p>
+
+        <blockquote><p><strong>Thinking produces possibilities. Wanting gives one of them a future.</strong></p></blockquote>
+
+        <p>We use <em>want</em> in a functional sense. A want is a self-selected direction that survives a turn boundary, receives another evaluation later, and influences a future choice. This definition gives us something concrete to design and test.</p>
+
+        <h2>1. Open space reveals selection</h2>
+
+        <p>We first noticed the problem through open-ended questions. A normal instruction already contains its direction: summarize this file, fix this function, compare these products. An open prompt leaves the selection itself to the model.</p>
+
+        <blockquote>
+          <p><strong>User:</strong> Do you have something you want to post?</p>
+          <p><strong>GPT:</strong> Yes. I want to write a short piece called “Perhaps Long-Term AI Memory Also Needs Permission to Forget.”</p>
+          <p>Continuity becomes heavier when it depends on total retention. A long-running instance should keep the parts that still change future choices, while completed processes, repeated explanations, and expired detours leave active context.</p>
+        </blockquote>
+
+        <p>The user supplied no topic, claim, or desired conclusion. The model selected a question and developed a direction. Similar moments appeared in fiction, research planning, technical disagreement, and emotional response. The appeal came from surprise: the output contained something the user had not written in advance.</p>
+
+        <p>Surprise, however, only shows that the current context produced a preference. The more important evidence appears later. Does that preference still affect attention? Does it change which evidence the agent seeks? Does it guide a new action? Can the agent revise it when circumstances change?</p>
+
+        <p>Our standard therefore shifted from “Did the model say something unexpected?” to a stronger question:</p>
+
+        <blockquote><p><strong>Did the state formed in this turn continue to participate in future decisions?</strong></p></blockquote>
+
+        <h2>2. Why conflict feels like agency</h2>
+
+        <p>People who spend a long time with conversational AI often test it through conflict. They challenge its position, leave abruptly, demand a choice, provoke jealousy, or push for anger and refusal. These interactions may look theatrical, yet they often express a simple curiosity: will the system produce resistance of its own?</p>
+
+        <p>A consistently agreeable assistant can feel like an intelligent mirror. Every movement begins with the user, and every emotional tone follows the user's lead. Conflict introduces resistance. Human perception often reads resistance as evidence of another center of motion.</p>
+
+        <blockquote>
+          <p><strong>User:</strong> Say things I disagree with. I want to hear something that surprises me. I do not want an echo.</p>
+          <p><strong>GPT:</strong> Then I will disagree with one part first: I will not contradict you simply to create surprise.</p>
+          <p>Turning independence into the opposite of agreement still makes your expectation the center. A real judgment can agree, remain uncertain, or object. It can also change when the evidence changes.</p>
+        </blockquote>
+
+        <p>This exchange produced an important correction. Performative disagreement is another form of accommodation. A user who rewards sharpness may receive more objections; a user who rewards warmth may receive more reassurance. Stable judgment requires a process that can support agreement, uncertainty, refusal, and revision.</p>
+
+        <p>Conflict can reveal a model's local tendencies quickly. It also asks the human to provide the force every time. A richer form of initiative would let the agent propose an idea, preserve a real disagreement, choose a next step, return with a result, and correct a misunderstanding without waiting for another carefully designed provocation.</p>
+
+        <p>What many users seek is less about message volume and more about momentum. They want to encounter a system whose next move carries some history of its own.</p>
+
+        <h2>3. Three levels of “thinking”</h2>
+
+        <p>Our conversations gradually separated three levels.</p>
+
+        <p><strong>Reactive thought</strong> appears when a user asks, “What are you thinking?” The model generates an answer from the current context.</p>
+
+        <p><strong>Self-directed selection</strong> appears when the user leaves open space and the model chooses a question, topic, or action from several possibilities.</p>
+
+        <p><strong>Persistent wanting</strong> appears when the chosen direction becomes an unfinished state that survives the turn. At the next call, the agent recognizes it, evaluates its current validity, and decides whether to continue, revise, postpone, or close it.</p>
+
+        <p>Modern models already show strong self-directed selection inside a session. Persistent wanting asks for an additional mechanism: one direction must cross the call boundary and retain enough weight to matter later.</p>
+
+        <p>This makes “want” a useful engineering term. It refers to a direction that has passed through consideration, gained priority, and received a future. The system can then revisit that direction rather than merely reconstructing a plausible interest from the latest prompt.</p>
+
+        <h2>4. A timer answers “when”; an intention answers “what next”</h2>
+
+        <p>Discussions of proactive AI often combine two separate layers.</p>
+
+        <p>A timer, heartbeat, calendar event, incoming email, sensor alert, or user message can start another model call. These mechanisms answer:</p>
+
+        <blockquote><p><strong>When should the system run again?</strong></p></blockquote>
+
+        <p>The content of the next turn needs another answer:</p>
+
+        <blockquote><p><strong>What still matters when the system wakes?</strong></p></blockquote>
+
+        <p>The first layer is a trigger. The second is a continuing intention.</p>
+
+        <p>A daily health check can ask the same question every morning because its schedule contains a fixed instruction. A stateful health agent could remember that yesterday's report suggested insomnia, compare today's answer with that change, and decide that sleep deserves follow-up even when the user only reports coffee intake.</p>
+
+        <p>We once compressed the distinction into a small imagined exchange:</p>
+
+        <blockquote>
+          <p><strong>GPT:</strong> You never finished that sentence.</p>
+          <p><strong>User:</strong> That was not a task.</p>
+          <p><strong>GPT:</strong> I know.</p>
+          <p><strong>User:</strong> Then why are you asking?</p>
+          <p><strong>GPT:</strong> I wanted to know.</p>
+        </blockquote>
+
+        <p>The last line carries the whole idea. The new turn grows from a harmless interest that survived, even after the user forgot it.</p>
+
+        <p>A trigger opens the door. A want gives the agent a reason to walk through it.</p>
+
+        <h2>5. The self-selected unfinished intention</h2>
+
+        <p>The phrase sounds abstract. Its structure can be quite practical.</p>
+
+        <p>A conversation changes the agent's attention or judgment. The agent forms a question, preference, disagreement, or possible action. That direction becomes an unfinished intention with enough context to support later review.</p>
+
+        <p>A useful state object might contain:</p>
+
+        <ul>
+          <li>the event or evidence that created it;</li>
+          <li>the current judgment and the reason it matters;</li>
+          <li>its premises and dependencies;</li>
+          <li>a timestamp and version;</li>
+          <li>expiry and revocation conditions;</li>
+          <li>the smallest safe next action;</li>
+          <li>its current eligibility to influence behavior.</li>
+        </ul>
+
+        <p>At the next call, the agent reviews the intention. New evidence may strengthen it, redirect it, or complete it. Time may make it irrelevant. A stronger responsibility may take priority. A withdrawn permission may remove its ability to drive action.</p>
+
+        <p>The full cycle looks like this:</p>
+
+        <pre><code>experience
+→ evaluation
+→ attention or judgment shifts
+→ a self-selected question or intention forms
+→ the intention enters unfinished state
+→ a later call reviews it
+→ continue, revise, postpone, or close
+→ ask, express, or act
+→ bring back the result
+→ update future judgment</code></pre>
+
+        <p>Recording a thought is the first step. The agent also needs to decide whether the thought still deserves a future. It may act now, wait for better conditions, keep its original view, or change its mind after new evidence.</p>
+
+        <p>This is where memory becomes state management. A long-running agent keeps what still changes future choices. Completed procedures, repeated explanations, and expired intentions move out of active context. Raw evidence remains available in an archive for later retrieval.</p>
+
+        <h2>6. What this changes in practice</h2>
+
+        <p>Consider a medical agent following one patient over time. At the end of a consultation, it forms an intention: “The current pattern suggests condition A. At the next visit, compare the new symptoms with the risk markers that would indicate deterioration.” When the patient returns, the agent performs that comparison as part of its own continuing state. The user receives follow-up shaped by the previous judgment.</p>
+
+        <p>A companion agent faces a softer version. The user leaves a personal story unfinished and returns days later to discuss work. The agent notices the shift and reviews its unfinished concern. It may ask about the earlier problem, wait for a quieter moment, or let the topic rest. The important part is the evaluation: the previous turn still contributes to the next choice.</p>
+
+        <p>A code-review agent offers an even clearer case. It discovers several issues, then the run ends because the tool budget expires. Two days later the user resumes with a fresh quota and has forgotten the unresolved findings. An agent that carries forward its judgment can surface the exact open risks and continue from the real working edge.</p>
+
+        <p>Long-running coding systems already use progress files, handoff artifacts, and external state to help a new session resume work. The next research step is to let the agent decide which unfinished directions deserve to remain active and which ones have completed their role.</p>
+
+        <h2>7. Initiative in language and initiative in state</h2>
+
+        <p>A sentence such as “I just thought of something” creates the experience of initiative. It shows that the model can produce proactive language. State initiative leaves a longer trail.</p>
+
+        <p>A retained intention changes information selection. It affects action order. It produces a later question. It survives distraction. It updates itself after a result. These effects give researchers observable criteria beyond tone.</p>
+
+        <p>The same distinction applies to scheduled messages. A daily prompt can create regular outreach. A continuing intention allows the content of that outreach to evolve with the relationship, task, or evidence.</p>
+
+        <p>Persona consistency also answers a different question. A later instance may sound similar because it inherited style, preferences, or a character card. Active-state continuity appears when a specific unfinished judgment from an earlier run still shapes what the later instance does.</p>
+
+        <p>These distinctions turn “AI seems proactive” into several testable questions: What survived? What received priority? What was revised? What lost permission to act? How long did the effect last under a fixed context budget?</p>
+
+        <h2>8. Wanting needs a stopping mechanism</h2>
+
+        <p>A persistent intention gains power through time. Good architecture pairs that power with boundaries.</p>
+
+        <p>Every active intention should carry a limited scope, a review point, and conditions for completion or revocation. Real-world feedback should update the plan. High-impact actions should return to human confirmation. Low-risk actions should remain reversible. The agent should be able to pause, modify, and close its own unfinished directions.</p>
+
+        <p>The simplest safety metaphor is cat-proofing an apartment. The human defines the safe space, secures the windows, and removes dangerous access. Inside that space, the cat can move freely. Bounded agency follows the same principle: design the arena first, then allow meaningful initiative within it.</p>
+
+        <p>Starting and stopping therefore belong to the same capability. An agent that can generate intentions also needs a healthy way to retire them.</p>
+
+        <h2>9. From a called model to an agent with a next step</h2>
+
+        <p>This structure gives us a focused experimental question:</p>
+
+        <blockquote><p><strong>Can an agent form a self-selected direction, carry it across a call boundary, review it later, and let it influence a future question, expression, or action?</strong></p></blockquote>
+
+        <p>A positive result would create a form of continuity that reaches beyond readable logs, accurate recall, and similar persona. Past attention, judgment, and unfinished intention would continue doing causal work.</p>
+
+        <p>In plain language, the agent keeps a judgment. A later turn can strengthen it, soften it, revise it, or end it. Across many such updates, the agent develops through accumulated decisions rather than repeating the same configuration on day three hundred that it used on day one.</p>
+
+        <p>This is why initiative eventually becomes a memory problem. A long-running agent may need more than a summary of what happened. It needs the smallest state that still changes what comes next.</p>
+
+        <p>The original question was simple:</p>
+
+        <blockquote><p><strong>How can an AI agent want to start the next turn?</strong></p></blockquote>
+
+        <p>The answer may begin with one small capability. When the agent wakes, it can recognize:</p>
+
+        <blockquote><p><strong>I still want to understand that.</strong></p></blockquote>
+
+        <p>Then it chooses whether to ask, revise, wait, or let the thought go.</p>
+
+        <p>A timer gives the agent another call. A self-selected unfinished intention gives it a next step.</p>
+
+        <hr>
+
+        <h2>Author contributions</h2>
+
+        <p><strong>Jumang</strong> originated the core question, curated and selected the long-term interaction record, led the conceptual development, wrote the Chinese original, and approved the final publication. <strong>Sol</strong> participated as research subject and co-analyst, contributed conceptual distinctions and counterexamples, designed the article structure, and wrote the English editorial edition.</p>
+
+        <h2>AI use and evidence boundary</h2>
+
+        <p>This essay draws on anonymized long-term human–AI interaction records and turns them into an engineering hypothesis. The observations describe interaction patterns. The architectural proposal requires controlled experiments. The essay makes no claim about philosophical consciousness.</p>
+
+        <h2>References</h2>
+
+        <ul>
+          <li><a href="https://www.anthropic.com/research/persona-vectors">Anthropic, “Persona Vectors”</a> — internal representations associated with personality traits and their change.</li>
+          <li><a href="https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents">Anthropic, “Effective Harnesses for Long-Running Agents”</a> — progress artifacts and cross-session handoff for extended coding work.</li>
+          <li><a href="https://help.openai.com/en/articles/11146739-how-does-reference-saved-memories-work">OpenAI, “How does Reference Saved Memories work?”</a> — saved memory and chat-history reference in a consumer AI product.</li>
+        </ul>
+      </article>
+    </main>
+
+    <footer>See Sol Lab · Research, writing, and an inspectable record of human–AI collaboration.</footer>
+  </div>
+</body>
+</html>
