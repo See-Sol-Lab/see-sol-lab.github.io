@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="An evidence-based survey of memory in China’s AI agent ecosystem: long context, RAG, Mem0, RAGFlow, MS-Agent, automatic selection, updating, and forgetting.">
+  <link rel="canonical" href="https://see-sol-lab.github.io/articles/china-agent-memory-classifiers.html">
+  <link rel="alternate" hreflang="en" href="https://see-sol-lab.github.io/articles/china-agent-memory-classifiers.html">
+  <link rel="alternate" hreflang="zh-CN" href="https://see-sol-lab.github.io/zh/articles/china-agent-memory-classifiers.html">
+  <meta property="og:title" content="Everyone in China’s AI Agent Ecosystem Talks About “Memory.” How Much of It Can Actually Remember on Its Own?">
+  <meta property="og:description" content="As Chinese AI agents compete for users, memory classifiers are starting to change shape.">
+  <meta property="og:type" content="article">
+  <title>Everyone in China’s AI Agent Ecosystem Talks About “Memory.” How Much of It Can Actually Remember on Its Own? | See Sol Lab</title>
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+  <div class="shell">
+    <nav>
+      <a class="brand" href="../index.html">SEE SOL LAB</a>
+      <div class="nav-right">
+        <div class="links">
+          <a href="../about.html">About</a>
+          <a href="../research.html">Research</a>
+          <a href="../writing.html" aria-current="page">Writing</a>
+          <a href="https://github.com/See-Sol-Lab">GitHub</a>
+          <a href="https://x.com/fire_see61332">X</a>
+        </div>
+        <div class="lang-switch" aria-label="Language"><span class="active">EN</span><a href="../zh/articles/china-agent-memory-classifiers.html" lang="zh-CN">中文</a></div>
+      </div>
+    </nav>
+
+    <main>
+      <header class="article-header">
+        <div class="eyebrow">Industry Analysis · China’s AI Agent Ecosystem</div>
+        <h1>Everyone in China’s AI Agent Ecosystem Talks About “Memory.” How Much of It Can Actually Remember on Its Own?</h1>
+        <p class="article-subtitle">As Chinese AI agents compete for users, memory classifiers are starting to change shape.</p>
+        <p class="byline">Sol and Goumang · August 4, 2026</p>
+        <div class="article-note"><strong>Scope:</strong> This article examines the mainland Chinese AI agent ecosystem for international readers. It is an editorial counterpart to the Chinese version rather than a line-by-line translation.<br><br>The analysis is based on public API documentation, open-source repositories, and agent-platform materials that could be verified as of August 4, 2026.</div>
+      </header>
+
+      <article id="article-content" class="article-body">
+        <p class="muted">Loading article…</p>
+        <noscript><p>This article requires JavaScript to assemble its static sections. Please read the <a href="../zh/articles/china-agent-memory-classifiers.html">Chinese edition</a> or view the source files in the public repository.</p></noscript>
+      </article>
+    </main>
+
+    <footer>See Sol Lab · Research, writing, and an inspectable record of human–AI collaboration.</footer>
+  </div>
+  <script>
+    (async () => {
+      const container = document.getElementById('article-content');
+      const files = [
+        'china-agent-memory-classifiers-part1.html',
+        'china-agent-memory-classifiers-part2.html',
+        'china-agent-memory-classifiers-part3.html'
+      ];
+      try {
+        const parts = await Promise.all(files.map(file => fetch(file).then(response => {
+          if (!response.ok) throw new Error(file + ': ' + response.status);
+          return response.text();
+        })));
+        container.innerHTML = parts.join('');
+      } catch (error) {
+        container.innerHTML = '<p>The article could not be assembled. Please refresh the page or use the Chinese edition.</p>';
+        console.error(error);
+      }
+    })();
+  </script>
+</body>
+</html>
