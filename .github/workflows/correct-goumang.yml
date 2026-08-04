@@ -1,0 +1,47 @@
+name: Correct Goumang romanization
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  correct-name:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Replace incorrect romanization
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          text_suffixes = {'.html', '.md', '.txt', '.xml', '.json', '.yml', '.yaml'}
+          changed = []
+          for path in Path('.').rglob('*'):
+              if not path.is_file() or '.git' in path.parts or path.suffix.lower() not in text_suffixes:
+                  continue
+              text = path.read_text(encoding='utf-8')
+              revised = text.replace('Jumang', 'Goumang')
+              if revised != text:
+                  path.write_text(revised, encoding='utf-8')
+                  changed.append(str(path))
+          print('Updated:', changed)
+          PY
+      - name: Remove one-time workflow and commit
+        shell: bash
+        run: |
+          git config user.name "See Sol Lab"
+          git config user.email "798715178abb@gmail.com"
+          git rm .github/workflows/correct-goumang.yml
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes needed."
+            exit 0
+          fi
+          git commit -m "Correct Goumang romanization across the site"
+          git push
